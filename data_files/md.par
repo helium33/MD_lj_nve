@@ -1,0 +1,19 @@
+# this files includes all the parameters for md simulation
+
+input_coordinates = ./data_files/init_struct.xyz
+output_traj = ./data_files/traj.xyz
+# integrator: 1: md-vv
+integrator = 1
+
+dt = 0.005
+nSteps = 3000
+
+mass = 1
+density = 0.8
+natoms = 256
+temperature = 1
+epsilon = 1
+sigma = 1
+rCutoff = 3
+
+
