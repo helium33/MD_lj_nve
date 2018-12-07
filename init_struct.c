@@ -14,6 +14,7 @@ void gen_fcc(t_mdPara *md_para, float **(*px))
                        {0.25, 0.75, 0.75},                                 
                        {0.75, 0.75, 0.25},                                 
                        {0.75, 0.25, 0.75}};
+  fvec com = {0,0,0};
 
   nr = md_para->natoms;                                          
   nPerEdge = md_para->nPerEdge;;                              
@@ -35,7 +36,12 @@ void gen_fcc(t_mdPara *md_para, float **(*px))
     }                                                                      
   }                                                                        
   matrix_scale(nr, 3, *px, md_para->boxLength/nPerEdge);
-  matrix_shift(nr, 3, *px, md_para->boxLength/2);                         
+  for(j=0; j<3; j++) {
+    for(i=0; i<nr; i++)
+      com[j] += (*px)[i][j];
+    com[j] /= nr;
+  }
+  matrix_shift(nr, 3, *px, com);                        
 }    
 
 int main(int argc, char* argv[])

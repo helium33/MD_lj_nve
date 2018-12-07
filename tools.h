@@ -32,7 +32,7 @@ char *get_dir(char *fnm);
 void init_matrix(int nrow, int ncol, float **(*pmat));
 void init_state(t_state *md_state, int nr);
 void matrix_scale(int nrow, int ncol, float **ma, float sFactor);
-void matrix_shift(int nrow, int ncol, float **ma, float sFactor);
+void matrix_shift(int nrow, int ncol, float **ma, fvec sFactor);
 void matrix_sum(int nrow, int ncol, float **ma, float **ma2);
 void parse_comm_args(int *argc, char *argv[], t_mdPara *md_para,           
                     char *fn_in, char *fn_out);

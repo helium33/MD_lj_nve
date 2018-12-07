@@ -84,13 +84,13 @@ void matrix_scale(int nrow, int ncol, float **ma, float sFactor)
       ma[i][j] *= sFactor;
 }
 
-void matrix_shift(int nrow, int ncol, float **ma, float sFactor)
+void matrix_shift(int nrow, int ncol, float **ma, fvec sFactor)
 {
   int i, j;
 
   for(i=0; i<nrow; i++)
     for(j=0; j<ncol; j++)
-      ma[i][j] -= sFactor;
+      ma[i][j] -= sFactor[j];
 }
 
 void matrix_sum(int nrow, int ncol, float **ma1, float **ma2)
@@ -315,10 +315,22 @@ float randn(float mu, float sigma)
   return (mu + sigma * (float) X1);
 }
 
+void calc_comV(int nr, t_state *md_state, fvec comV)
+{
+  int i, j;
+
+  for(j=0; j<3; j++) {
+    for(i=0; i<nr; i++) 
+      comV[j] += md_state->v[i][j];
+    comV[j] = comV[j] / nr;
+  }
+}
+
 void gen_velocity(t_mdPara *md_para, t_state *md_state)
 {
   int i, j, nr;
-  float temperature, mass, epsilon, sigma;
+  float temperature, mass, epsilon, sigma, vScale;
+  fvec comV = {0,0,0};
 
   srand((int)time(NULL));
   nr = md_para->natoms;
@@ -330,6 +342,15 @@ void gen_velocity(t_mdPara *md_para, t_state *md_state)
   for(i=0; i<nr; i++)
     for(j=0; j<3; j++)
       md_state->v[i][j] = randn(0, sigma);
+  calc_comV(nr, md_state, comV);      
+  for(i=0; i<nr; i++)                                                      
+    for(j=0; j<3; j++)
+      md_state->v[i][j] -= comV[j];
+  calc_kinE(md_para, md_state);
+  vScale = sqrt((1.5 * nr * temperature / md_state->kinE));
+  for(i=0; i<nr; i++)                                                      
+    for(j=0; j<3; j++)
+      md_state->v[i][j] *= vScale;
   calc_kinE(md_para, md_state);
 }
 
