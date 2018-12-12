@@ -171,6 +171,8 @@ void parse_comm_args(int *argc, char *argv[], t_mdPara *md_para,
       sscanf(tmpstring, "%s %s %f", lineEle1, &(lineEle2), &(md_para->sigma));
     else if(startswith(tmpstring, "rCutoff"))
       sscanf(tmpstring, "%s %s %f", lineEle1, &(lineEle2), &(md_para->rCutoff));
+    else if(startswith(tmpstring, "pbc"))
+      sscanf(tmpstring, "%s %s %d", lineEle1, &(lineEle2), &(md_para->pbc));
     else {
       fprintf(stderr, "parameter %s is not defined\n", lineEle1);
       exit(0);

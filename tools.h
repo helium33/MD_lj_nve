@@ -24,6 +24,7 @@ typedef struct
   float vCutoff;
   float dt;
   int nSteps;
+  int pbc;
 } t_mdPara;
 
 float calc_r2(fvec x);
